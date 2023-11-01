@@ -1,0 +1,8 @@
+# .goreleaser.yaml
+builds:
+  - id: envLoader
+    binary: envLoader
+    main: ./
+    goos:
+      - linux
+  
