@@ -23,7 +23,7 @@ func Encrypt(cCtx *cli.Context) error {
 		return fmt.Errorf("%v", err)
 	}
 
-	fmt.Print("\nEncryption successful.\n")
+	fmt.Print("Encryption successful.\n")
 
 	return nil
 }
