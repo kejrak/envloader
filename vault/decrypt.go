@@ -12,7 +12,7 @@ import (
 	"github.com/kejrak/envLoader/utils"
 )
 
-func Decrypt(file, output, keyFile, keyString string) ([]byte, error) {
+func Decrypt(file, output, keyFile, keyString string, inplace bool) ([]byte, error) {
 
 	km := &KeyType{
 		keyFile:            keyFile,
@@ -43,8 +43,10 @@ func Decrypt(file, output, keyFile, keyString string) ([]byte, error) {
 
 	if output != "" {
 		utils.WriteFile(output, plainText)
-	} else {
+	} else if inplace {
 		utils.WriteFile(file, plainText)
+	} else {
+		fmt.Fprint(os.Stdout, string(plainText))
 	}
 
 	return plainText, nil

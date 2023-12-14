@@ -66,13 +66,13 @@ func TestEncryptionDecryption(t *testing.T) {
 	}
 
 	t.Run("test encryption", func(t *testing.T) {
-		err := Encrypt(tempFile.Name(), "", km.keyFile, "")
-		assert.Nil(t, err, "Error shoud be nil.")
+		err := Encrypt(tempFile.Name(), "", km.keyFile, "", true)
+		assert.Nil(t, err, "Error should be nil.")
 	})
 	t.Run("test decryption", func(t *testing.T) {
-		decryptedContent, err := Decrypt(tempFile.Name(), "", "", string(passContent))
+		decryptedContent, err := Decrypt(tempFile.Name(), "", "", string(passContent), true)
 		assert.Equal(t, tempContent, decryptedContent, "The contents should be equal.")
-		assert.Nil(t, err, "Error shoud be nil.")
+		assert.Nil(t, err, "Error should be nil.")
 	})
 }
 
