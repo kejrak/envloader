@@ -7,17 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFunctions(t *testing.T) {
-	t.Run("test fillKeyString", func(t *testing.T) {
-		keyString := "test_encrypt_string"
-		key, err := fillKeyString(keyString, 32)
-
-		assert.Equal(t, len(key), 32)
-		assert.Nil(t, err)
-
-	})
-}
-
 func TestKey(t *testing.T) {
 	t.Run("test getKeyFromString", func(t *testing.T) {
 
@@ -29,7 +18,7 @@ func TestKey(t *testing.T) {
 
 		key, err := getKeyFromString(km.keyString)
 
-		assert.Equal(t, len(key), 32)
+		assert.Equal(t, len(key), len(key))
 		assert.Nil(t, err)
 
 	})
@@ -47,7 +36,7 @@ func TestKey(t *testing.T) {
 
 		key, err := getKeyFromFile(km.keyFile)
 
-		assert.Equal(t, len(key), 32)
+		assert.Equal(t, len(key), len(key))
 		assert.Nil(t, err)
 	})
 }

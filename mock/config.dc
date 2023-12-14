@@ -1,0 +1,7 @@
+message="Hello everyone!"
+
+[github]
+name=MyFancyNameOnGithub
+
+[gitlab]
+name=MyfancyNameOnGitlab

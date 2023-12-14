@@ -75,7 +75,7 @@ func readPlainText(file, keyFile, keyString string) ([]byte, error) {
 			return nil, err
 		}
 
-		plainText, err = decryption(file, key)
+		plainText, err = decryption(file, key, km)
 		if err != nil {
 			fmt.Printf("%v", err)
 			return nil, err
