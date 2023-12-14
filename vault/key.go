@@ -14,11 +14,6 @@ import (
 	"golang.org/x/term"
 )
 
-const (
-	minPasswordLength = 4
-	keyLength         = 32
-)
-
 // KeyManager is an interface for managing encryption keys.
 type KeyManager interface {
 	getKey() (string, error)
