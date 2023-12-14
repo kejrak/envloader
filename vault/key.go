@@ -71,16 +71,13 @@ func getKeyFromFile(keyFile string) (string, error) {
 // getKeyFromPrompt gets the encryption key from user input.
 func getKeyFromPrompt(encryptionRequired bool) (string, error) {
 	if encryptionRequired {
-
-		fmt.Print("New password: ")
-		bytePassword, err := readPassword()
+		bytePassword, err := readPassword("New password: ")
 		if err != nil {
 			return "", fmt.Errorf("\nfailed to get key from prompt: %w", err)
 		}
 
-		fmt.Print("\nRepeat password: ")
-		checkPassword, err := readPassword()
-		fmt.Print("\n")
+		checkPassword, err := readPassword("\nRepeat password: ")
+		fmt.Println()
 		if err != nil {
 			return "", fmt.Errorf("failed to get key from prompt: %w", err)
 		}
@@ -97,10 +94,8 @@ func getKeyFromPrompt(encryptionRequired bool) (string, error) {
 
 		return key, nil
 	}
-
-	fmt.Print("Password: ")
-	password, err := readPassword()
-	fmt.Print("\n")
+	password, err := readPassword("Password: ")
+	fmt.Println()
 	if err != nil {
 		return "", fmt.Errorf("failed to get key from prompt: %w", err)
 	}
@@ -112,7 +107,8 @@ func getKeyFromPrompt(encryptionRequired bool) (string, error) {
 }
 
 // readPassword reads the user input from STDIN.
-func readPassword() (string, error) {
+func readPassword(promt string) (string, error) {
+	fmt.Print(promt)
 	stdin := int(syscall.Stdin)
 	oldState, err := term.GetState(stdin)
 	if err != nil {
