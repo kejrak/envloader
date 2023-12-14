@@ -30,6 +30,15 @@ Using **key file**:
 --key-file [your file with secure key]
 ```
 
+Using **in-place to the same file**: 
+```
+-i 
+```
+
+```
+--in-place 
+```
+
 Using **output to a different file**:  
 ```
 -o [file]
