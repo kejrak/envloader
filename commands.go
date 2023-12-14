@@ -28,7 +28,12 @@ var commands = []*cli.Command{
 			&cli.StringFlag{
 				Name:    "output",
 				Aliases: []string{"o"},
-				Usage:   "output file",
+				Usage:   "write output to file",
+			},
+			&cli.BoolFlag{
+				Name:    "in-place",
+				Aliases: []string{"i"},
+				Usage:   "write output back to the same file instead of stdout",
 			},
 		},
 		Action: action.Encrypt,
@@ -56,6 +61,11 @@ var commands = []*cli.Command{
 				Name:    "output",
 				Aliases: []string{"o"},
 				Usage:   "output file",
+			},
+			&cli.BoolFlag{
+				Name:    "in-place",
+				Aliases: []string{"i"},
+				Usage:   "write output back to the same file instead of stdout",
 			},
 		},
 		Action: action.Decrypt,

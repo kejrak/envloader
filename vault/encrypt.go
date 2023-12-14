@@ -13,7 +13,7 @@ import (
 	"github.com/kejrak/envLoader/utils"
 )
 
-func Encrypt(file, output, keyFile, keyString string) error {
+func Encrypt(file, output, keyFile, keyString string, inplace bool) error {
 
 	km := &KeyType{
 		keyFile:            keyFile,
@@ -43,8 +43,10 @@ func Encrypt(file, output, keyFile, keyString string) error {
 
 	if output != "" {
 		utils.WriteFile(output, cipherText)
-	} else {
+	} else if inplace {
 		utils.WriteFile(file, cipherText)
+	} else {
+		fmt.Fprint(os.Stdout, string(cipherText))
 	}
 
 	return nil

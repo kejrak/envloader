@@ -45,7 +45,6 @@ func (km *KeyType) getKey() (string, error) {
 
 // getKeyFromString gets the encryption key from a string.
 func getKeyFromString(keyString string) (string, error) {
-
 	key, err := fillKeyString(keyString, keyLength)
 	if err != nil {
 		return "", err
@@ -71,17 +70,17 @@ func getKeyFromFile(keyFile string) (string, error) {
 
 // getKeyFromPrompt gets the encryption key from user input.
 func getKeyFromPrompt(encryptionRequired bool) (string, error) {
-
 	if encryptionRequired {
 
 		fmt.Print("New password: ")
 		bytePassword, err := readPassword()
 		if err != nil {
-			return "", fmt.Errorf("failed to get key from prompt: %w", err)
+			return "", fmt.Errorf("\nfailed to get key from prompt: %w", err)
 		}
 
 		fmt.Print("\nRepeat password: ")
 		checkPassword, err := readPassword()
+		fmt.Print("\n")
 		if err != nil {
 			return "", fmt.Errorf("failed to get key from prompt: %w", err)
 		}
@@ -101,6 +100,7 @@ func getKeyFromPrompt(encryptionRequired bool) (string, error) {
 
 	fmt.Print("Password: ")
 	password, err := readPassword()
+	fmt.Print("\n")
 	if err != nil {
 		return "", fmt.Errorf("failed to get key from prompt: %w", err)
 	}
@@ -113,7 +113,6 @@ func getKeyFromPrompt(encryptionRequired bool) (string, error) {
 
 // readPassword reads the user input from STDIN.
 func readPassword() (string, error) {
-
 	stdin := int(syscall.Stdin)
 	oldState, err := term.GetState(stdin)
 	if err != nil {
@@ -140,7 +139,6 @@ func readPassword() (string, error) {
 
 // fillKeyString fills up the key to provided maximum keyLength.
 func fillKeyString(key string, keyLength int) (string, error) {
-
 	if len(key) <= minPasswordLength {
 		return "", errors.New("provided password is too short")
 	}
