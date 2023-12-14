@@ -36,7 +36,12 @@ func Encrypt(file, output, keyFile, keyString string, inplace bool) error {
 		return fmt.Errorf("%w", err)
 	}
 
-	cipherText, err := encryption(file, key)
+	key, salt, err := km.deriveKey(key, nil)
+	if err != nil {
+		return fmt.Errorf("%w", err)
+	}
+
+	cipherText, err := encryption(file, key, salt)
 	if err != nil {
 		return err
 	}
@@ -53,7 +58,7 @@ func Encrypt(file, output, keyFile, keyString string, inplace bool) error {
 
 }
 
-func encryption(file, key string) ([]byte, error) {
+func encryption(file string, key, salt []byte) ([]byte, error) {
 
 	plainText, err := os.ReadFile(file)
 
@@ -75,6 +80,8 @@ func encryption(file, key string) ([]byte, error) {
 		log.Printf("cannot encrypt: %v", err)
 		return nil, err
 	}
+
+	cipherText = append(cipherText, salt...)
 
 	encodedCiphertext := base64.StdEncoding.EncodeToString(cipherText)
 

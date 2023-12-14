@@ -30,12 +30,11 @@ func Decrypt(file, output, keyFile, keyString string, inplace bool) ([]byte, err
 	}
 
 	key, err := km.getKey()
-
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w", err)
 	}
 
-	plainText, err := decryption(file, key)
+	plainText, err := decryption(file, key, km)
 
 	if err != nil {
 		return nil, err
@@ -52,7 +51,7 @@ func Decrypt(file, output, keyFile, keyString string, inplace bool) ([]byte, err
 	return plainText, nil
 }
 
-func decryption(file, key string) ([]byte, error) {
+func decryption(file string, key []byte, keyManager *KeyType) ([]byte, error) {
 
 	cipherText, err := os.ReadFile(file)
 	if err != nil {
@@ -66,9 +65,13 @@ func decryption(file, key string) ([]byte, error) {
 		return nil, err
 	}
 
-	secretKey := []byte(key)
+	salt, cipherText := cipherText[len(cipherText)-32:], cipherText[:len(cipherText)-32]
+	key, _, err = keyManager.deriveKey(key, salt)
+	if err != nil {
+		return nil, err
+	}
 
-	block, err := aes.NewCipher(secretKey)
+	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
 	}

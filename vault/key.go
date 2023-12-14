@@ -1,14 +1,16 @@
 package vault
 
 import (
+	"bytes"
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
 	"github.com/kejrak/envLoader/utils"
+	"golang.org/x/crypto/scrypt"
 	"golang.org/x/term"
 )
 
@@ -20,6 +22,7 @@ const (
 // KeyManager is an interface for managing encryption keys.
 type KeyManager interface {
 	getKey() (string, error)
+	deriveKey(key, salt []byte) ([]byte, []byte, error)
 }
 
 // KeyType represents the type of encryption key and its source.
@@ -30,7 +33,7 @@ type KeyType struct {
 }
 
 // getKey gets the encryption key based on the KeyType configuration.
-func (km *KeyType) getKey() (string, error) {
+func (km *KeyType) getKey() ([]byte, error) {
 
 	if km.keyString != "" {
 		return getKeyFromString(km.keyString)
@@ -43,76 +46,78 @@ func (km *KeyType) getKey() (string, error) {
 	return getKeyFromPrompt(km.encryptionRequired)
 }
 
-// getKeyFromString gets the encryption key from a string.
-func getKeyFromString(keyString string) (string, error) {
-	key, err := fillKeyString(keyString, keyLength)
-	if err != nil {
-		return "", err
+// deriveKey gets the encryption key based on salt configurations.
+func (km *KeyType) deriveKey(key, salt []byte) ([]byte, []byte, error) {
+
+	if salt == nil {
+		salt = make([]byte, 32)
+		if _, err := rand.Read(salt); err != nil {
+			return nil, nil, err
+		}
 	}
-	return key, nil
+
+	key, err := scrypt.Key(key, salt, 1048576, 8, 1, 32)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return key, salt, nil
+}
+
+// getKeyFromString gets the encryption key from a string.
+func getKeyFromString(keyString string) ([]byte, error) {
+	return []byte(keyString), nil
 }
 
 // getKeyFromFile gets the encryption key from provided file.
-func getKeyFromFile(keyFile string) (string, error) {
+func getKeyFromFile(keyFile string) ([]byte, error) {
 
-	password, err := utils.ReadFile(keyFile)
+	key, err := utils.ReadFile(keyFile)
 	if err != nil {
-		return "", fmt.Errorf("%w", err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
-	key, err := fillKeyString(string(password), keyLength)
-	if err != nil {
-		return "", err
-	}
-
-	return string(key), nil
+	return key, nil
 }
 
 // getKeyFromPrompt gets the encryption key from user input.
-func getKeyFromPrompt(encryptionRequired bool) (string, error) {
+func getKeyFromPrompt(encryptionRequired bool) ([]byte, error) {
 	if encryptionRequired {
 		bytePassword, err := readPassword("New password: ")
 		if err != nil {
-			return "", fmt.Errorf("\nfailed to get key from prompt: %w", err)
+			return nil, fmt.Errorf("\nfailed to get key from prompt: %w", err)
 		}
 
 		checkPassword, err := readPassword("\nRepeat password: ")
 		fmt.Println()
 		if err != nil {
-			return "", fmt.Errorf("failed to get key from prompt: %w", err)
+			return nil, fmt.Errorf("failed to get key from prompt: %w", err)
 		}
 
-		if bytePassword != checkPassword {
-			return "", errors.New("passwords don't match")
+		if !bytes.Equal(bytePassword, checkPassword) {
+			return nil, errors.New("passwords don't match")
 		}
 
-		password := string(bytePassword)
-		key, err := fillKeyString(strings.TrimSpace(password), keyLength)
-		if err != nil {
-			return "", err
-		}
+		key := bytePassword
 
 		return key, nil
 	}
-	password, err := readPassword("Password: ")
+	key, err := readPassword("Password: ")
 	fmt.Println()
 	if err != nil {
-		return "", fmt.Errorf("failed to get key from prompt: %w", err)
+		return nil, fmt.Errorf("failed to get key from prompt: %w", err)
 	}
-	key, err := fillKeyString(password, keyLength)
-	if err != nil {
-		return "", fmt.Errorf("failed to get key from prompt: %w", err)
-	}
+
 	return key, nil
 }
 
 // readPassword reads the user input from STDIN.
-func readPassword(promt string) (string, error) {
+func readPassword(promt string) ([]byte, error) {
 	fmt.Print(promt)
 	stdin := int(syscall.Stdin)
 	oldState, err := term.GetState(stdin)
 	if err != nil {
-		return "", fmt.Errorf("failed to read password: %w", err)
+		return nil, fmt.Errorf("failed to read password: %w", err)
 	}
 	defer term.Restore(stdin, oldState)
 
@@ -128,24 +133,24 @@ func readPassword(promt string) (string, error) {
 
 	password, err := term.ReadPassword(stdin)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(password), nil
-}
-
-// fillKeyString fills up the key to provided maximum keyLength.
-func fillKeyString(key string, keyLength int) (string, error) {
-	if len(key) <= minPasswordLength {
-		return "", errors.New("provided password is too short")
-	}
-
-	bytes := []byte(key)
-	iter := len(bytes)
-
-	for i := 0; i < keyLength-iter; i++ {
-		bytes = append(bytes, byte(0))
-	}
-
-	password := string(bytes)
 	return password, nil
 }
+
+// // fillKeyString fills up the key to provided maximum keyLength.
+// func fillKeyString(key string, keyLength int) (string, error) {
+// 	if len(key) <= minPasswordLength {
+// 		return "", errors.New("provided password is too short")
+// 	}
+
+// 	bytes := []byte(key)
+// 	iter := len(bytes)
+
+// 	for i := 0; i < keyLength-iter; i++ {
+// 		bytes = append(bytes, byte(0))
+// 	}
+
+// 	password := string(bytes)
+// 	return password, nil
+// }
