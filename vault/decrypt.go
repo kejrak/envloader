@@ -12,6 +12,9 @@ import (
 	"github.com/kejrak/envLoader/utils"
 )
 
+// Decrypt takes an encrypted file, decrypts its content using AES-256 algorithm,
+// and writes the decrypted content to an output file or stdout.
+// If inplace is true, the original file is overwritten with the decrypted content.
 func Decrypt(file, output, keyFile, keyString string, inplace bool) ([]byte, error) {
 
 	km := &KeyType{
@@ -51,6 +54,8 @@ func Decrypt(file, output, keyFile, keyString string, inplace bool) ([]byte, err
 	return plainText, nil
 }
 
+// decryption performs AES-GCM decryption on the content of the specified file.
+// It returns the decrypted content.
 func decryption(file string, key []byte, keyManager *KeyType) ([]byte, error) {
 
 	cipherText, err := os.ReadFile(file)
@@ -76,17 +81,17 @@ func decryption(file string, key []byte, keyManager *KeyType) ([]byte, error) {
 		return nil, fmt.Errorf("%v", err)
 	}
 
-	result, err := gcmDecrypt(cipherText, block)
+	plainText, err := gcmDecrypt(cipherText, block)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
 	}
 
-	return result, nil
-
+	return plainText, nil
 }
 
+// gcmDecrypt performs AES-GCM decryption on the given ciphertext using the provided block.
+// It returns the decrypted plaintext.
 func gcmDecrypt(cipherText []byte, block cipher.Block) ([]byte, error) {
-
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return nil, err

@@ -13,6 +13,10 @@ import (
 	"github.com/kejrak/envLoader/utils"
 )
 
+// Encrypt encrypts the specified file using AES-256-GCM encryption.
+// It takes input file, output file (optional), key file, key string, and an inplace flag.
+// If inplace is true, it overwrites the input file with the encrypted content.
+// If output is specified, it writes the encrypted content to the output file.
 func Encrypt(file, output, keyFile, keyString string, inplace bool) error {
 
 	km := &KeyType{
@@ -55,9 +59,10 @@ func Encrypt(file, output, keyFile, keyString string, inplace bool) error {
 	}
 
 	return nil
-
 }
 
+// encryption performs AES-GCM encryption on the content of the specified file.
+// It returns the encrypted content along with a special header.
 func encryption(file string, key, salt []byte) ([]byte, error) {
 
 	plainText, err := os.ReadFile(file)
@@ -82,7 +87,6 @@ func encryption(file string, key, salt []byte) ([]byte, error) {
 	}
 
 	cipherText = append(cipherText, salt...)
-
 	encodedCiphertext := base64.StdEncoding.EncodeToString(cipherText)
 
 	result := []byte("!envLoader | AES-256\n" + encodedCiphertext)
@@ -90,14 +94,11 @@ func encryption(file string, key, salt []byte) ([]byte, error) {
 		log.Printf("write file err: %v", err.Error())
 	}
 
-	cipherText = []byte(utils.WrapBytes(result))
-
-	return cipherText, nil
-
+	return []byte(utils.WrapBytes(result)), nil
 }
 
+// gcmEncrypt performs AES-GCM encryption on the given plaintext using the provided block.
 func gcmEncrypt(plainText []byte, block cipher.Block) ([]byte, error) {
-
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
 		log.Printf("cipher GCM err: %v", err)
@@ -112,8 +113,5 @@ func gcmEncrypt(plainText []byte, block cipher.Block) ([]byte, error) {
 		return nil, err
 	}
 
-	cipherText := gcm.Seal(nonce, nonce, plainText, nil)
-
-	return cipherText, nil
-
+	return gcm.Seal(nonce, nonce, plainText, nil), nil
 }
