@@ -11,8 +11,9 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+// Load reads environment configuration from a file, decrypts if necessary,
+// and loads it into a binary by executing a command based on environmental value.
 func Load(file, binary, envType, keyFile, keyString string) error {
-
 	plainText, err := readPlainText(file, keyFile, keyString)
 	if err != nil {
 		return err
@@ -41,8 +42,8 @@ func Load(file, binary, envType, keyFile, keyString string) error {
 
 }
 
+// readPlainText reads the plaintext content of the file, decrypting if necessary.
 func readPlainText(file, keyFile, keyString string) ([]byte, error) {
-
 	var plainText []byte
 
 	km := &KeyType{
@@ -85,8 +86,8 @@ func readPlainText(file, keyFile, keyString string) ([]byte, error) {
 	}
 }
 
+// loadToBinary loads environment variables into a binary by executing a command based on environmental value.
 func loadToBinary(envType, binary string, globalSection, section *ini.Section) error {
-
 	if _, err := os.Stat(binary); os.IsNotExist(err) {
 		fmt.Printf("binary file doesn't exist!\n")
 		return nil
@@ -102,8 +103,8 @@ func loadToBinary(envType, binary string, globalSection, section *ini.Section) e
 	return cmd.Run()
 }
 
+// appendKeysToCmdEnv appends INI keys to the environment of a command based on environmental value.
 func appendKeysToCmdEnv(keys []*ini.Key, cmd *exec.Cmd) {
-
 	for _, key := range keys {
 		value := fmt.Sprintf("%s=%s", strings.ToUpper(key.Name()), key.Value())
 		cmd.Env = append(cmd.Env, value)

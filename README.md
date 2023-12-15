@@ -1,8 +1,8 @@
 # EnvLoader - CLI Tool 
-EnvLoader is a powerful command-line interface (CLI) tool designed to enhance the management of environment variables in your projects. With the ability to encrypt and decrypt files using a maximum 32-bit key, EnvLoader also provides seamless injection of environment variables from .ini files into binary files.
+EnvLoader is a powerful command-line interface (CLI) tool designed to enhance the management of environment variables in your projects. With the ability to encrypt and decrypt files, EnvLoader also provides seamless injection of environment variables from .ini files into binary files.
 
 ## Features
-- File Encryption and Decryption: Securely encrypt and decrypt files using a key of up to 32 bits to protect sensitive information.
+- File Encryption and Decryption: Securely encrypt and decrypt files to protect sensitive information.
 
 - Environment Variable Injection into Binary Files: Easily load environment variables from .ini files and inject them into binary files, suitable for Docker Compose and shell scripts.
 

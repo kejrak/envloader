@@ -29,7 +29,6 @@ type KeyType struct {
 
 // getKey gets the encryption key based on the KeyType configuration.
 func (km *KeyType) getKey() ([]byte, error) {
-
 	if km.keyString != "" {
 		return getKeyFromString(km.keyString)
 	}
@@ -43,7 +42,6 @@ func (km *KeyType) getKey() ([]byte, error) {
 
 // deriveKey gets the encryption key based on salt configurations.
 func (km *KeyType) deriveKey(key, salt []byte) ([]byte, []byte, error) {
-
 	if salt == nil {
 		salt = make([]byte, 32)
 		if _, err := rand.Read(salt); err != nil {
@@ -51,7 +49,7 @@ func (km *KeyType) deriveKey(key, salt []byte) ([]byte, []byte, error) {
 		}
 	}
 
-	key, err := scrypt.Key(key, salt, 1048576, 8, 1, 32)
+	key, err := scrypt.Key(key, salt, 32768, 8, 1, 32)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -66,7 +64,6 @@ func getKeyFromString(keyString string) ([]byte, error) {
 
 // getKeyFromFile gets the encryption key from provided file.
 func getKeyFromFile(keyFile string) ([]byte, error) {
-
 	key, err := utils.ReadFile(keyFile)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
@@ -109,6 +106,7 @@ func getKeyFromPrompt(encryptionRequired bool) ([]byte, error) {
 // readPassword reads the user input from STDIN.
 func readPassword(promt string) ([]byte, error) {
 	fmt.Print(promt)
+
 	stdin := int(syscall.Stdin)
 	oldState, err := term.GetState(stdin)
 	if err != nil {
@@ -119,7 +117,7 @@ func readPassword(promt string) ([]byte, error) {
 	sigch := make(chan os.Signal, 1)
 	signal.Notify(sigch, os.Interrupt)
 	go func() {
-		for _ = range sigch {
+		for range sigch {
 			term.Restore(stdin, oldState)
 			fmt.Print("\nReceived interrupt signal.\n")
 			os.Exit(1)
@@ -130,22 +128,6 @@ func readPassword(promt string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return password, nil
 }
-
-// // fillKeyString fills up the key to provided maximum keyLength.
-// func fillKeyString(key string, keyLength int) (string, error) {
-// 	if len(key) <= minPasswordLength {
-// 		return "", errors.New("provided password is too short")
-// 	}
-
-// 	bytes := []byte(key)
-// 	iter := len(bytes)
-
-// 	for i := 0; i < keyLength-iter; i++ {
-// 		bytes = append(bytes, byte(0))
-// 	}
-
-// 	password := string(bytes)
-// 	return password, nil
-// }
