@@ -15,7 +15,8 @@ var (
 
 func main() {
 	cli.AppHelpTemplate = fmt.Sprintf(`%s	
-SHELL TYPE: %s
+SHELL TYPE: 
+	 %s	Type of shell, that runs script (default '/bin/sh')
 `, cli.AppHelpTemplate, utils.GetEnv("ENVLOADER_SHELL_TYPE", "/bin/sh"))
 
 	app := &cli.App{
