@@ -51,6 +51,8 @@ Using **output to a different file**:
 ## Loading variables
 EnvLoader allows you to seamlessly load environment variables from both encrypted and decrypted .ini configuration files into shell scripts. This is particularly useful for managing configurations across different environments such as development, testing, and production.
 
+**Shell type** option can be changed by setting environment variable **ENVLOADER_SHELL_TYPE** to something like **/bin/bash**. Default value for this option is **/bin/sh**.
+
 Assuming simple _config.ini_ file and binary script _run.sh_:
 ``` ini
 message="Hello everyone!"
@@ -59,7 +61,7 @@ message="Hello everyone!"
 name=MyFancyNameOnGithub
 
 [gitlab]
-name=MyfancyNameOnGitlab
+name=MyFancyNameOnGitlab
 ```
 
 ``` sh
