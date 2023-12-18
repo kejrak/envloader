@@ -11,6 +11,10 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+var (
+	shellType = utils.GetEnv("ENVLOADER_SHELL_TYPE", "/bin/sh")
+)
+
 // Load reads environment configuration from a file, decrypts if necessary,
 // and loads it into a binary by executing a command based on environmental value.
 func Load(file, binary, envType, keyFile, keyString string) error {
@@ -95,7 +99,7 @@ func loadToBinary(envType, binary string, globalSection, section *ini.Section) e
 
 	fmt.Printf("configuration: %s\n", envType)
 
-	cmd := exec.Command("/bin/sh", binary)
+	cmd := exec.Command(shellType, binary)
 
 	appendKeysToCmdEnv(globalSection.Keys(), cmd)
 	appendKeysToCmdEnv(section.Keys(), cmd)

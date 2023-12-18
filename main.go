@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/kejrak/envLoader/utils"
 	"github.com/urfave/cli/v2"
 )
 
@@ -12,6 +14,10 @@ var (
 )
 
 func main() {
+	cli.AppHelpTemplate = fmt.Sprintf(`%s	
+SHELL TYPE: %s
+`, cli.AppHelpTemplate, utils.GetEnv("ENVLOADER_SHELL_TYPE", "/bin/sh"))
+
 	app := &cli.App{
 		Name:        "envLoader",
 		Usage:       "environment cli tool",
