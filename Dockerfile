@@ -1,5 +1,7 @@
 FROM golang:alpine
 
+LABEL maintainer "kejrak"
+
 WORKDIR /app
 
 COPY . /app

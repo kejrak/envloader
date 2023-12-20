@@ -84,8 +84,17 @@ Load Variables from **decrypted** .ini configuration:
 envLoader -f config.ini -b run.sh -e gitlab
 ```
 
-## Try It Yourself!
+## Docker Image
+You can test **envLoader** with Docker image.
+```
+docker pull kejrak/envloader:latest
+```
 
+```
+docker run --rm kejrak/envloader
+```
+
+## Try It Yourself!
 Clone the repository, build the application or download it.
 
 ```
@@ -95,7 +104,6 @@ make build
 Place the binary into your **$PATH**.
 
 ### Encrypt it!
-
 Encrypt the configuration file with provided password file and load it's variables into the binary scripts.
 
 ```
@@ -109,3 +117,5 @@ Check the created **test.txt**:
 ```
 cat test.txt
 ```
+
+
