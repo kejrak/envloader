@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// CheckEncryptedFile checks, if the file is already enrypted.
 func CheckEncryptedFile(file string) (bool, error) {
 	plainText, err := os.Open(file)
 	if err != nil {
@@ -24,6 +25,7 @@ func CheckEncryptedFile(file string) (bool, error) {
 	return false, nil
 }
 
+// WriteFile writes byte content to the provided file.
 func WriteFile(file string, text []byte) error {
 
 	err := os.WriteFile(file, text, 0644)
@@ -36,6 +38,7 @@ func WriteFile(file string, text []byte) error {
 	return nil
 }
 
+// ReadFile reads content from provided file.
 func ReadFile(file string) ([]byte, error) {
 
 	plainText, err := os.ReadFile(file)
@@ -46,6 +49,7 @@ func ReadFile(file string) ([]byte, error) {
 	return plainText, err
 }
 
+// WrapBytes wraps byte content.
 func WrapBytes(bytes []byte) string {
 	var result string
 	var line []byte
@@ -62,6 +66,8 @@ func WrapBytes(bytes []byte) string {
 	return result
 }
 
+// GetEnv gets environment variable value based on the provided key.
+// It cat sets up default value.
 func GetEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if len(value) == 0 {
