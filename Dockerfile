@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM --platform=$BUILDPLATFORM golang:alpine
 
 LABEL maintainer "kejrak"
 
