@@ -117,5 +117,3 @@ Check the created **test.txt**:
 ```
 cat test.txt
 ```
-
-
