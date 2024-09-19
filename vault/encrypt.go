@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/kejrak/envLoader/utils"
+	"github.com/kejrak/envloader/utils"
 )
 
 // Encrypt encrypts the specified file using AES-256-GCM encryption.
@@ -89,7 +89,7 @@ func encryption(file string, key, salt []byte) ([]byte, error) {
 	cipherText = append(cipherText, salt...)
 	encodedCiphertext := base64.StdEncoding.EncodeToString(cipherText)
 
-	result := []byte("!envLoader | AES-256\n" + encodedCiphertext)
+	result := []byte("!envloader | AES-256\n" + encodedCiphertext)
 	if err != nil {
 		log.Printf("write file err: %v", err.Error())
 	}

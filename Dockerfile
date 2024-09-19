@@ -12,4 +12,4 @@ RUN apk add --no-cache make
 
 RUN make build
 
-ENTRYPOINT [ "./bin/envLoader"]
+ENTRYPOINT [ "./bin/envloader"]

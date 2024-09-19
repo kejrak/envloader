@@ -9,11 +9,11 @@ EnvLoader is a powerful command-line interface (CLI) tool designed to enhance th
 ## Usage
 Using **key prompt**:
 ```
-envLoader encrypt -f config.ini
+envloader encrypt -f config.ini
 ```
 
 ```
-envLoader decrypt -f config.ini
+envloader decrypt -f config.ini
 ```
 
 Using **key string**:  
@@ -74,18 +74,18 @@ echo "Running! $NAME" >> test.txt
 ### Encrypted configuration
 Load Variables from **encrypted** .ini configuration:
 ```
-envLoader -f config.ini -b run.sh -k [your secure key] -e github
+envloader -f config.ini -b run.sh -k [your secure key] -e github
 ```
 In this example, the -e flag is used to choose the section (github in this case), and EnvLoader will include variables from both the global section and the specified section in the generated script.
 
 ### Decrypted configuration
 Load Variables from **decrypted** .ini configuration:
 ```
-envLoader -f config.ini -b run.sh -e gitlab
+envloader -f config.ini -b run.sh -e gitlab
 ```
 
 ## Docker Image
-You can test **envLoader** with Docker image.
+You can test **envloader** with Docker image.
 ```
 docker pull kejrak/envloader:latest
 ```
@@ -108,8 +108,8 @@ Encrypt the configuration file with provided password file and load it's variabl
 
 ```
 cd mock/  
-envLoader encrypt -f config.ini --key-file password.txt  
-envLoader load -f config.ini -b run.sh --key-file password.txt -e github
+envloader encrypt -f config.ini --key-file password.txt  
+envloader load -f config.ini -b run.sh --key-file password.txt -e github
 ```
 
 Check the created **test.txt**:

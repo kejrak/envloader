@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kejrak/envLoader/action"
+	"github.com/kejrak/envloader/action"
 	"github.com/urfave/cli/v2"
 )
 

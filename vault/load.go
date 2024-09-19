@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/kejrak/envLoader/utils"
+	"github.com/kejrak/envloader/utils"
 	"gopkg.in/ini.v1"
 )
 

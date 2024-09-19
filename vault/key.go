@@ -9,7 +9,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/kejrak/envLoader/utils"
+	"github.com/kejrak/envloader/utils"
 	"golang.org/x/crypto/scrypt"
 	"golang.org/x/term"
 )

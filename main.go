@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/kejrak/envLoader/utils"
+	"github.com/kejrak/envloader/utils"
 	"github.com/urfave/cli/v2"
 )
 
@@ -20,7 +20,7 @@ SHELL TYPE:
 `, cli.AppHelpTemplate, utils.GetEnv("ENVLOADER_SHELL_TYPE", "/bin/sh"))
 
 	app := &cli.App{
-		Name:        "envLoader",
+		Name:        "envloader",
 		Usage:       "environment cli tool",
 		Version:     version,
 		Description: "A cli tool to inject variables from encrypted / decrypted file into binary.",

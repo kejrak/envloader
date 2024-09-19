@@ -19,7 +19,7 @@ func CheckEncryptedFile(file string) (bool, error) {
 
 	if scanner.Scan() {
 		firstLine := scanner.Text()
-		return strings.HasPrefix(firstLine, "!envLoader | AES-256"), nil
+		return strings.HasPrefix(firstLine, "!envloader | AES-256"), nil
 	}
 
 	return false, nil

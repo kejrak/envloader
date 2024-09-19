@@ -1,4 +1,4 @@
-module github.com/kejrak/envLoader
+module github.com/kejrak/envloader
 
 go 1.20
 

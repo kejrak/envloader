@@ -7,4 +7,4 @@ test:
 	go test ./... -v
 
 build: test
-	go build -o ./bin/envLoader -ldflags "${LDFLAGS}" *.go
+	go build -o ./bin/envloader -ldflags "${LDFLAGS}" *.go

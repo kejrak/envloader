@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kejrak/envLoader/utils"
+	"github.com/kejrak/envloader/utils"
 )
 
 // Decrypt takes an encrypted file, decrypts its content using AES-256 algorithm,
@@ -63,7 +63,7 @@ func decryption(file string, key []byte, keyManager *KeyType) ([]byte, error) {
 		return nil, fmt.Errorf("%v", err)
 	}
 
-	cipherText = []byte(strings.TrimPrefix(string(cipherText), "!envLoader | AES-256"))
+	cipherText = []byte(strings.TrimPrefix(string(cipherText), "!envloader | AES-256"))
 
 	cipherText, err = base64.StdEncoding.DecodeString(strings.TrimSpace(string(cipherText)))
 	if err != nil {

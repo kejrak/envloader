@@ -3,7 +3,7 @@ package action
 import (
 	"fmt"
 
-	"github.com/kejrak/envLoader/vault"
+	"github.com/kejrak/envloader/vault"
 	"github.com/urfave/cli/v2"
 )
 
